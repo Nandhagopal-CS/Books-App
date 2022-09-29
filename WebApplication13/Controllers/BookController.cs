@@ -35,6 +35,19 @@ namespace WebApplication13.Controllers
             var data = repository.GetByISBN(isbn);
             return Ok(data);
         }
+        [HttpGet]
+        public IHttpActionResult Get2(string catName)
+        {
+            var data = repository.GetByCategory(catName);
+            return Ok(data);
+        }
+        [HttpGet]
+        public IHttpActionResult Get3(string name)
+        {
+            var data = repository.GetByName(name);
+            return Ok(data);
+        }
+
         [HttpPost]
         public IHttpActionResult Post(Book book)
         {

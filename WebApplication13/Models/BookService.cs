@@ -112,9 +112,31 @@ namespace WebApplication13.Models
 
        
 
-        List<Book> IBook.GetByCategory(string category)
+        List<Book> IBook.GetByCategory(string CatName)
         {
-            throw new NotImplementedException();
+            List<Book> list = new List<Book>();
+            comm.CommandText = "select BookId,Books.CategoryId,Title,Author,ISBN,Year,Price,Books.Description,Books.Position,Books.Status,Books.Image from Books,Category where Category.CategoryName='" + CatName + "' and Category.CategoryId=Books.CategoryId";
+            comm.Connection = conn;
+            conn.Open();
+            SqlDataReader reader = comm.ExecuteReader();
+            while (reader.Read())
+            {
+                int bId = Convert.ToInt32(reader["BookId"]);
+                int cId = Convert.ToInt32(reader["CategoryId"]);
+                string title = reader["Title"].ToString();
+                string author = reader["Author"].ToString();
+                int isbn = Convert.ToInt32(reader["ISBN"]);
+                int year = Convert.ToInt32(reader["Year"]);
+                int price = Convert.ToInt32(reader["Price"]);
+                string des = reader["Description"].ToString();
+                int pos = Convert.ToInt32(reader["Position"]);
+                string status = reader["Status"].ToString();
+                string img = reader["Image"].ToString();
+
+                list.Add(new Book(bId, cId, title, author, isbn, year, price, des, pos, status, img));
+            }
+            conn.Close();
+            return list;
         }
 
 
@@ -150,10 +172,30 @@ namespace WebApplication13.Models
         }
 
      
-
         List<Book> IBook.GetByName(string name)
         {
-            
+            List<Book> list = new List<Book>();
+            comm.CommandText = "select * from Books where Title LIKE '%" + name + "%'";
+            comm.Connection = conn;
+            conn.Open();
+            SqlDataReader reader = comm.ExecuteReader();
+            while (reader.Read())
+            {
+                int bId = Convert.ToInt32(reader["BookId"]);
+                int cId = Convert.ToInt32(reader["CategoryId"]);
+                string title = reader["Title"].ToString();
+                string author = reader["Author"].ToString();
+                int isbn = Convert.ToInt32(reader["ISBN"]);
+                int year = Convert.ToInt32(reader["Year"]);
+                int price = Convert.ToInt32(reader["Price"]);
+                string des = reader["Description"].ToString();
+                int pos = Convert.ToInt32(reader["Position"]);
+                string status = reader["Status"].ToString();
+                string img = reader["Image"].ToString();
+                list.Add(new Book(bId, cId, title, author, isbn, year, price, des, pos, status, img));
+            }
+            conn.Close();
+            return list;
         }
     }
 }
